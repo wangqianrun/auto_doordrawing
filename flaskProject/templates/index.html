@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAD自动绘制程序</title>
+    <style>
+        /* 页面内容居中 */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 标题样式 */
+        h1 {
+            text-align: center; /* 标题居中 */
+            margin-bottom: 20px; /* 给标题和表单之间留出空间 */
+            font-size: 76px; /* 调整字体大小 */
+        }
+
+        /* 表单容器 */
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 410px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表单中的每一行 */
+        label, input {
+            margin-bottom: 10px;
+        }
+
+        /* 输入框宽度设置 */
+        input {
+            width: 90%;  /* 使输入框宽度适应表单宽度 */
+            padding: 10px;
+            font-size: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* 按钮样式 */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+
+    </style>
+    <script>
+        // 发送POST请求到Flask后端
+        function createDoor() {
+            // 获取输入的数据
+            const totalWidth = parseFloat(document.getElementById("total_width").value);
+            const totalHeight = parseFloat(document.getElementById("total_height").value);
+            const smallDoorWidth = parseFloat(document.getElementById("small_door_width").value);
+            const smallDoorHeight = parseFloat(document.getElementById("small_door_height").value);
+            const flag = parseFloat(document.getElementById("flag").value);
+            const blosterType = parseFloat(document.getElementById("bloster_type").value);
+
+            // 创建请求数据对象
+            const data = {
+                total_width: totalWidth,
+                total_height: totalHeight,
+                small_door_width: smallDoorWidth,
+                small_door_height: smallDoorHeight,
+                flag:flag,
+                bloster_type:blosterType
+            };
+
+            // 发送POST请求
+            fetch('http://127.0.0.1:5000/create_door', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Success: ' + data.message);
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>朝田门业</h1>
+
+    <form>
+        <label for="total_width">门宽</label>
+        <input type="number" id="total_width" name="total_width" required><br><br>
+
+        <label for="total_height">门高</label>
+        <input type="number" id="total_height" name="total_height" required><br><br>
+
+        <label for="small_door_width">小门宽</label>
+        <input type="number" id="small_door_width" name="small_door_width" required><br><br>
+
+        <label for="small_door_height">小门高</label>
+        <input type="number" id="small_door_height" name="small_door_height" required><br><br>
+
+        <label for="flag">拉手孔类型</label>
+        <input type="number" id="flag" name="flag" required><br><br>
+
+        <label for="bloster_type">支撑类型</label>
+        <input type="number" id="bloster_type" name="bloster_type" required><br><br>
+
+        <button type="button" onclick="createDoor()">提交</button>
+    </form>
+</body>
+</html>
